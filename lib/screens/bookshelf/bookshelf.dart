@@ -9,20 +9,8 @@ class Bookshelf extends StatefulWidget {
 
 class _BookshelfState extends State<Bookshelf> {
 
-String _title = '';
-String _author = '';
-
-  void _setTitle(title) {
-    setState(() {
-      _title = title;
-    });
-  }
-
-  void _setAuthor(author) {
-    setState(() {
-      _author = author;
-    });
-  }
+  final titleFieldText = TextEditingController();
+  final authorFieldText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,38 +20,52 @@ String _author = '';
 
     Future<void> addBook() {
       return books.add({
-        'title': _title,
-        'author': _author
+        'title': titleFieldText.value,
+        'author': authorFieldText.value
       })
-      .then((value) => print('Book added'))
+      .then((value) {
+        print('Book added');
+        setState(() {
+          titleFieldText.clear();
+          authorFieldText.clear();
+        });
+      })
       .catchError((error) => print('Failed to add user: $error'));
     }
 
     return Container(
       height: MediaQuery.of(context).size.height,
       child: Scaffold(body: 
-        Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Book Title'
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(children: [
+                Flexible(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Book Title'
+                    ),
+                    controller: titleFieldText,
+                  ),
+                ),
+                Flexible(child:               TextField(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Book Author'
+                ),
+                controller: authorFieldText,
+              ),),
+                            IconButton(
+                onPressed: addBook,
+                icon: Icon(Icons.add)
               ),
-              onChanged: (String value) => _setTitle(value)
-            ),
-            TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Book Author'
-              ),
-              onChanged: (String value) => _setAuthor(value)
-            ),
-            TextButton(
-              onPressed: addBook,
-              child: Text('Add Book')
-            ),
-            Expanded( child: BookshelfList())
-          ]
+              ],),
+
+              Expanded( child: BookshelfList())
+            ]
+          ),
         )
       ),
     );

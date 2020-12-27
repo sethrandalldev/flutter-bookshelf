@@ -6,6 +6,14 @@ class BookshelfList extends StatelessWidget {
   Widget build(BuildContext context) {
     CollectionReference books = FirebaseFirestore.instance.collection('books');
 
+    deleteBook(DocumentSnapshot doc) {
+      books
+        .doc(doc.id)
+        .delete()
+        .then((value) => print("Book deleted"))
+        .catchError((error) => print("Failed to delete book: $error"));
+    }
+
     return StreamBuilder<QuerySnapshot>(
       stream: books.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -14,7 +22,7 @@ class BookshelfList extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          return Text("Loading Books");
         }
 
         return new ListView(
@@ -22,6 +30,7 @@ class BookshelfList extends StatelessWidget {
             return new ListTile(
               title: new Text(document.data()['title']),
               subtitle: new Text(document.data()['author']),
+              trailing: IconButton(icon: Icon(Icons.delete), onPressed: () => deleteBook(document),)
             );
           }).toList(),
         );
