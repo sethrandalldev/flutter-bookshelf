@@ -1,3 +1,4 @@
+import 'package:bookshelf/screens/bookshelf/bookshelf_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,10 @@ class BookshelfList extends StatelessWidget {
             return new ListTile(
               title: new Text(document.data()['title']),
               subtitle: new Text(document.data()['author']),
-              trailing: IconButton(icon: Icon(Icons.delete), onPressed: () => deleteBook(document),)
+              trailing: IconButton(icon: Icon(Icons.delete), onPressed: () => deleteBook(document),),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => BookshelfItem(document)));
+              },
             );
           }).toList(),
         );

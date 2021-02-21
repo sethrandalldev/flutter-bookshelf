@@ -1,4 +1,4 @@
-import 'package:bookshelf/bookshelf_list.dart';
+import 'package:bookshelf/screens/bookshelf/bookshelf_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -35,34 +35,42 @@ class _BookshelfState extends State<Bookshelf> {
 
     return Container(
       height: MediaQuery.of(context).size.height,
-      child: Scaffold(body: 
-        Padding(
+      child: Scaffold(
+        appBar: AppBar(title: Center(child: Text('Bookshelf'))),
+        body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Row(children: [
-                Flexible(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Book Title'
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                    child: Row(
+                      
+                      children: [
+                      Flexible(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Book Title',
+                          ),
+                          controller: titleFieldText,
+                        ),
+                      ),
+                      Flexible(child:               TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Book Author'
+                      ),
+                      controller: authorFieldText,
+                    ),),
+                                  IconButton(
+                      onPressed: addBook,
+                      icon: Icon(Icons.add)
                     ),
-                    controller: titleFieldText,
+                    ],),
                   ),
                 ),
-                Flexible(child:               TextField(
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Book Author'
-                ),
-                controller: authorFieldText,
-              ),),
-                            IconButton(
-                onPressed: addBook,
-                icon: Icon(Icons.add)
-              ),
-              ],),
-
               Expanded( child: BookshelfList())
             ]
           ),
